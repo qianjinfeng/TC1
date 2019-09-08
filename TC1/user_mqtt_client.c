@@ -462,7 +462,7 @@ OSStatus user_recv_handler( void *arg )
     require( p_recv_msg, exit );
 
     app_log("user get data success! from_topic=[%s], msg=[%ld].\r\n", p_recv_msg->topic, p_recv_msg->datalen);
-    user_function_cmd_received( p_recv_msg->topic, (char *)p_recv_msg->data );
+    user_function_cmd_received( 0, (char *)p_recv_msg->data );
     free( p_recv_msg );
 
     exit:
