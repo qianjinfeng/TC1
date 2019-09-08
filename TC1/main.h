@@ -33,22 +33,6 @@
 #define Relay_5     MICO_GPIO_18
 #define Relay_NUM   PLUG_NUM
 
-typedef struct
-{
-    char hour;      //Ð¡Ê±
-    char minute;    //·ÖÖÓ
-    uint8_t repeat; //bit7:Ò»ŽÎ   bit6-0:ÖÜÈÕ-ÖÜÒ»
-    char action;    //¶¯×÷
-    char on;    //¿ª¹Ø
-} user_plug_task_config_t;
-
-typedef struct
-{
-    char name[PLUG_NAME_LENGTH];
-    char on;    //ŒÇÂŒµ±Ç°¿ª¹Ø
-    user_plug_task_config_t task[PLUG_TIME_TASK_NUM];
-
-} user_plug_config_t;
 
 //用户保存参数结构体
 typedef struct
@@ -60,7 +44,7 @@ typedef struct
 //     char mqtt_device_id[SETTING_MQTT_STRING_LENGTH_MAX];        //mqtt service user  device name
 
     char version;
-    user_plug_config_t plug[PLUG_NUM];
+    char plug[PLUG_NUM];
     char user[maxNameLen];
 } user_config_t;
 

@@ -35,7 +35,7 @@ void wifi_start_easylink( )
     user_led_set( 1 );
 }
 
-//easylink Íê³É»Øµ÷
+//easylink å®Œæˆå›è°ƒ
 void wifi_easylink_completed_handle( network_InitTypeDef_st *nwkpara, void * arg )
 {
     os_log("wifi_easylink_wps_completed_handle:");
@@ -48,7 +48,7 @@ void wifi_easylink_completed_handle( network_InitTypeDef_st *nwkpara, void * arg
 
     os_log("ssid:\"%s\",\"%s\"",nwkpara->wifi_ssid,nwkpara->wifi_key);
 
-    //±£´æwifi¼°ÃÜÂë
+    //ä¿å­˜wifiåŠå¯†ç 
     strcpy( sys_config->micoSystemConfig.ssid, nwkpara->wifi_ssid );
     strcpy( sys_config->micoSystemConfig.user_key, nwkpara->wifi_key );
     sys_config->micoSystemConfig.user_keyLength = strlen( nwkpara->wifi_key );
@@ -59,26 +59,26 @@ void wifi_easylink_completed_handle( network_InitTypeDef_st *nwkpara, void * arg
     micoWlanStopEasyLink( );
 }
 
-//wifiÒÑÁ¬½Ó»ñÈ¡µ½IPµØÖ· »Øµ÷
+//wifiå·²è¿æ¥è·å–åˆ°IPåœ°å€ å›è°ƒ
 static void wifi_get_ip_callback( IPStatusTypedef *pnet, void * arg )
 {
     os_log("got IP:%s", pnet->ip);
     wifi_status = WIFI_STATE_CONNECTED;
     user_function_cmd_received(1,"{\"cmd\":\"device report\"}");
 }
-//wifiÁ¬½Ó×´Ì¬¸Ä±ä»Øµ÷
+//wifiè¿æ¥çŠ¶æ€æ”¹å˜å›è°ƒ
 static void wifi_status_callback( WiFiEvent status, void *arg )
 {
-    if ( status == NOTIFY_STATION_UP ) //wifiÁ¬½Ó³É¹¦
+    if ( status == NOTIFY_STATION_UP ) //wifiè¿æ¥æˆåŠŸ
     {
         //wifi_status = WIFI_STATE_CONNECTED;
-    } else if ( status == NOTIFY_STATION_DOWN ) //wifi¶Ï¿ª
+    } else if ( status == NOTIFY_STATION_DOWN ) //wifiæ–­å¼€
     {
         wifi_status = WIFI_STATE_NOCONNECT;
         if ( !mico_rtos_is_timer_running( &wifi_led_timer ) ) mico_rtos_start_timer( &wifi_led_timer );
     }
 }
-//100ms¶¨Ê±Æ÷»Øµ÷
+//100mså®šæ—¶å™¨å›è°ƒ
 static void wifi_led_timer_callback( void* arg )
 {
     static unsigned int num = 0;
@@ -121,7 +121,7 @@ static void wifi_led_timer_callback( void* arg )
 
 void wifi_init( void )
 {
-    //wifiÅäÖÃ³õÊ¼»¯
+    //wifié…ç½®åˆå§‹åŒ–
 //    network_InitTypeDef_st wNetConfig;
 
 //    memset(&wNetConfig, 0, sizeof(network_InitTypeDef_st));
@@ -132,16 +132,16 @@ void wifi_init( void )
 //    wNetConfig.wifi_retry_interval=6000;
 //    micoWlanStart(&wNetConfig);
 
-    //wifi×´Ì¬ÏÂledÉÁË¸¶¨Ê±Æ÷³õÊ¼»¯
+    //wifiçŠ¶æ€ä¸‹ledé—ªçƒå®šæ—¶å™¨åˆå§‹åŒ–
     mico_rtos_init_timer( &wifi_led_timer, 100, (void *) wifi_led_timer_callback, NULL );
-    //easylink Íê³É»Øµ÷
+    //easylink å®Œæˆå›è°ƒ
     mico_system_notify_register( mico_notify_EASYLINK_WPS_COMPLETED, (void *) wifi_easylink_completed_handle, NULL );
-    //wifiÒÑÁ¬½Ó»ñÈ¡µ½IPµØÖ· »Øµ÷
+    //wifiå·²è¿æ¥è·å–åˆ°IPåœ°å€ å›è°ƒ
     mico_system_notify_register( mico_notify_DHCP_COMPLETED, (void *) wifi_get_ip_callback, NULL );
-    //wifiÁ¬½Ó×´Ì¬¸Ä±ä»Øµ÷
+    //wifiè¿æ¥çŠ¶æ€æ”¹å˜å›è°ƒ
     mico_system_notify_register( mico_notify_WIFI_STATUS_CHANGED, (void*) wifi_status_callback, NULL );
     //sntp_init();
-    //Æô¶¯¶¨Ê±Æ÷¿ªÊ¼½øĞĞwifiÁ¬½Ó
+    //å¯åŠ¨å®šæ—¶å™¨å¼€å§‹è¿›è¡Œwifiè¿æ¥
     if ( !mico_rtos_is_timer_running( &wifi_led_timer ) ) mico_rtos_start_timer( &wifi_led_timer );
 
     IPStatusTypedef para;

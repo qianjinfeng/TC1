@@ -43,27 +43,7 @@ void appRestoreDefault_callback( void * const user_config_data, uint32_t size )
     userConfigDefault->version = USER_CONFIG_VERSION;
     for ( i = 0; i < PLUG_NUM; i++ )
     {
-        userConfigDefault->plug[i].on = 1;
-
-        //²å×ùÃû³Æ ²å¿Ú1-6
-        userConfigDefault->plug[i].name[0] = 0xe6;
-        userConfigDefault->plug[i].name[1] = 0x8f;
-        userConfigDefault->plug[i].name[2] = 0x92;
-        userConfigDefault->plug[i].name[3] = 0xe5;
-        userConfigDefault->plug[i].name[4] = 0x8f;
-        userConfigDefault->plug[i].name[5] = 0xa3;
-        userConfigDefault->plug[i].name[6] = i + '1';
-        userConfigDefault->plug[i].name[7] = 0;
-
-//        sprintf( userConfigDefault->plug[i].name, "²å×ù%d", i );//±àÂëÒì³£
-        for ( j = 0; j < PLUG_TIME_TASK_NUM; j++ )
-        {
-            userConfigDefault->plug[i].task[j].hour = 0;
-            userConfigDefault->plug[i].task[j].minute = 0;
-            userConfigDefault->plug[i].task[j].repeat = 0x00;
-            userConfigDefault->plug[i].task[j].on = 0;
-            userConfigDefault->plug[i].task[j].action = 1;
-        }
+        userConfigDefault->plug[i] = 1;
     }
 //    mico_system_context_update( sys_config );
 
@@ -104,11 +84,11 @@ int application_start( void )
     for ( i = 0; i < Relay_NUM; i++ )
     {
         MicoGpioInitialize( Relay[i], OUTPUT_PUSH_PULL );
-        user_relay_set( i, user_config->plug[i].on );
+        user_relay_set( i, user_config->plug[i] );
     }
     MicoSysLed( 0 );
 
-    if ( user_config->version != USER_CONFIG_VERSION || user_config->plug[0].task[0].hour < 0 || user_config->plug[0].task[0].hour > 23 )
+    if ( user_config->version != USER_CONFIG_VERSION )
     {
         os_log( "WARNGIN: user params restored!" );
         err = mico_system_context_restore( sys_config );
@@ -124,11 +104,11 @@ int application_start( void )
         os_log( "result:%s",para.mac );
 
 
-        unsigned char mac1, mac2;
-        mac1 = strtohex( strMac[8], strMac[9] );
-        mac2 = strtohex( strMac[10], strMac[11] );
-        os_log( "strtohex:0x%02x%02x",mac1,mac2 );
-        sprintf( sys_config->micoSystemConfig.name, ZTC1_NAME, mac1, mac2 );
+        //unsigned char mac1, mac2;
+        //mac1 = strtohex( strMac[8], strMac[9] );
+        //mac2 = strtohex( strMac[10], strMac[11] );
+        //os_log( "strtohex:0x%02x%02x",mac1,mac2 );
+        sprintf( sys_config->micoSystemConfig.name, ZTC_NAME, strMac );
     }
 
     os_log( "user:%s",user_config->user );
