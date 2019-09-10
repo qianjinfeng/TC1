@@ -119,17 +119,6 @@ int application_start( void )
     os_log( "mqtt_password:%s",user_config->mqtt_password );
 
     os_log( "version:%d",user_config->version );
-//    for ( i = 0; i < PLUG_NUM; i++ )
-//    {
-//        os_log("plug_%d:",i);
-//        os_log("\tname:%s:",user_config->plug[i].name);
-//        for ( j = 0; j < PLUG_TIME_TASK_NUM; j++ )
-//        {
-//            os_log("\t\ton:%d\t %02d:%02d repeat:0x%X",user_config->plug[i].task[j].on,
-//                user_config->plug[i].task[j].hour,user_config->plug[i].task[j].minute,
-//                user_config->plug[i].task[j].repeat);
-//        }
-//    }
 
     wifi_init( );
     user_udp_init( );
@@ -158,7 +147,8 @@ int application_start( void )
                 user_send( 0, power_buf );
                 free( power_buf );
             }
-            user_mqtt_hass_power( );
+            //what if mqtt not set
+            //user_mqtt_hass_power( );
         }
         mico_thread_msleep(10000);
 

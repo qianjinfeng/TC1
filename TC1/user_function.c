@@ -17,7 +17,6 @@ void user_function_set_last_time( )
 }
 
 bool json_plug_analysis( int udp_flag, unsigned char x, cJSON * pJsonRoot, cJSON * pJsonSend );
-//bool json_plug_task_analysis( unsigned char x, unsigned char y, cJSON * pJsonRoot, cJSON * pJsonSend );
 
 void user_send( int udp_flag, char *s )
 {
@@ -76,7 +75,7 @@ void user_function_cmd_received( int udp_flag, uint8_t *pusrdata )
         cJSON *json_send = cJSON_CreateObject( );
         cJSON_AddStringToObject( json_send, "mac", strMac );
 
-        //œâÎöÖØÆôÃüÁî
+        //重启
         if(p_cmd && cJSON_IsString( p_cmd ) && strcmp( p_cmd->valuestring, "restart" ) == 0)
         {
             os_log("cmd:restart");
@@ -107,7 +106,7 @@ void user_function_cmd_received( int udp_flag, uint8_t *pusrdata )
                 cJSON_AddStringToObject( json_send, "power", temp_buf );
                 free( temp_buf );
             }
-            os_log("power:%d",power);
+            os_log("power:%ld",power);
         }
         //解析主机setting-----------------------------------------------------------------
         cJSON *p_setting = cJSON_GetObjectItem( pJsonRoot, "setting" );
@@ -178,6 +177,8 @@ void user_function_cmd_received( int udp_flag, uint8_t *pusrdata )
             if ( p_mqtt_password ) cJSON_AddStringToObject( json_setting_send, "mqtt_password", user_config->mqtt_password );
 
             cJSON_AddItemToObject( json_send, "setting", json_setting_send );
+
+            //TODO shall delete cJSON_Delete(json_setting_send)
         }
 
         //解析plug-----------------------------------------------------------------
@@ -226,8 +227,6 @@ bool json_plug_analysis( int udp_flag, unsigned char x, cJSON * pJsonRoot, cJSON
     cJSON *p_plug = cJSON_GetObjectItem( pJsonRoot, plug_str );
     if ( !p_plug ) return_flag = false;
 
-    //cJSON *json_plug_send = cJSON_CreateObject( );
-
     //解析plug on------------------------------------------------------
     if ( p_plug )
     {
@@ -236,108 +235,15 @@ bool json_plug_analysis( int udp_flag, unsigned char x, cJSON * pJsonRoot, cJSON
                 user_relay_set( x, p_plug->valueint );
                 return_flag = true;
             }
-            user_mqtt_send_plug_state( x );
+            //send through mqtt
+            if ( udp_flag == 0 ) 
+            {
+                user_mqtt_send_plug_state( x );
+            } 
     }
-    /*     cJSON *p_plug_on = cJSON_GetObjectItem( p_plug, "on" );
-        if ( p_plug_on )
-        {
-            if ( cJSON_IsNumber( p_plug_on ) )
-            {
-                user_relay_set( x, p_plug_on->valueint );
-                return_flag = true;
-            }
-            user_mqtt_send_plug_state( x );
-        }
-
-       //œâÎöplugÖÐsettingÏîÄ¿----------------------------------------------
-        cJSON *p_plug_setting = cJSON_GetObjectItem( p_plug, "setting" );
-        if ( p_plug_setting )
-        {
-            cJSON *json_plug_setting_send = cJSON_CreateObject( );
-            //œâÎöplugÖÐsettingÖÐname----------------------------------------
-            cJSON *p_plug_setting_name = cJSON_GetObjectItem( p_plug_setting, "name" );
-            if ( p_plug_setting_name )
-            {
-                if ( cJSON_IsString( p_plug_setting_name ) )
-                {
-                    return_flag = true;
-                    sprintf( user_config->plug[x].name, p_plug_setting_name->valuestring );
-                    user_mqtt_hass_auto_name( x );
-                }
-                cJSON_AddStringToObject( json_plug_setting_send, "name", user_config->plug[x].name );
-            }
-
-            //œâÎöplugÖÐsettingÖÐtask----------------------------------------
-            for ( i = 0; i < PLUG_TIME_TASK_NUM; i++ )
-            {
-                if ( json_plug_task_analysis( x, i, p_plug_setting, json_plug_setting_send ) )
-                    return_flag = true;
-            }
-
-            cJSON_AddItemToObject( json_plug_send, "setting", json_plug_setting_send );
-        }
-    }
-//    cJSON *p_nvalue = cJSON_GetObjectItem( pJsonRoot, "nvalue" );
-//    if ( p_plug || p_nvalue )
-    cJSON_AddNumberToObject( json_plug_send, "on", user_config->plug[x].on );
-*/
     cJSON_AddItemToObject( pJsonSend, plug_str, user_config->plug[x] );
     return return_flag;
 }
-
-/*
- *œâÎöŽŠÀí¶šÊ±ÈÎÎñjson
- *x:²å×ù±àºÅ y:ÈÎÎñ±àºÅ
- */
-/*bool json_plug_task_analysis( unsigned char x, unsigned char y, cJSON * pJsonRoot, cJSON * pJsonSend )
-{
-    if ( !pJsonRoot ) return false;
-    bool return_flag = false;
-
-    char plug_task_str[] = "task_X";
-    plug_task_str[5] = y + '0';
-
-    cJSON *p_plug_task = cJSON_GetObjectItem( pJsonRoot, plug_task_str );
-    if ( !p_plug_task ) return false;
-
-    cJSON *json_plug_task_send = cJSON_CreateObject( );
-
-    cJSON *p_plug_task_hour = cJSON_GetObjectItem( p_plug_task, "hour" );
-    cJSON *p_plug_task_minute = cJSON_GetObjectItem( p_plug_task, "minute" );
-    cJSON *p_plug_task_repeat = cJSON_GetObjectItem( p_plug_task, "repeat" );
-    cJSON *p_plug_task_action = cJSON_GetObjectItem( p_plug_task, "action" );
-    cJSON *p_plug_task_on = cJSON_GetObjectItem( p_plug_task, "on" );
-
-    if ( p_plug_task_hour && p_plug_task_minute && p_plug_task_repeat &&
-         p_plug_task_action
-         && p_plug_task_on )
-    {
-
-        if ( cJSON_IsNumber( p_plug_task_hour )
-             && cJSON_IsNumber( p_plug_task_minute )
-             && cJSON_IsNumber( p_plug_task_repeat )
-             && cJSON_IsNumber( p_plug_task_action )
-             && cJSON_IsNumber( p_plug_task_on )
-                                )
-        {
-            return_flag = true;
-            user_config->plug[x].task[y].hour = p_plug_task_hour->valueint;
-            user_config->plug[x].task[y].minute = p_plug_task_minute->valueint;
-            user_config->plug[x].task[y].repeat = p_plug_task_repeat->valueint;
-            user_config->plug[x].task[y].action = p_plug_task_action->valueint;
-            user_config->plug[x].task[y].on = p_plug_task_on->valueint;
-        }
-
-    }
-    cJSON_AddNumberToObject( json_plug_task_send, "hour", user_config->plug[x].task[y].hour );
-    cJSON_AddNumberToObject( json_plug_task_send, "minute", user_config->plug[x].task[y].minute );
-    cJSON_AddNumberToObject( json_plug_task_send, "repeat", user_config->plug[x].task[y].repeat );
-    cJSON_AddNumberToObject( json_plug_task_send, "action", user_config->plug[x].task[y].action );
-    cJSON_AddNumberToObject( json_plug_task_send, "on", user_config->plug[x].task[y].on );
-
-    cJSON_AddItemToObject( pJsonSend, plug_task_str, json_plug_task_send );
-    return return_flag;
-}*/
 
 unsigned char strtohex( char a, char b )
 {

@@ -148,7 +148,7 @@ void user_mqtt_timer_func( void *arg )
                         buf1,
                         "{\"mac\":\"%s\",\"version\":null,\"plug_0\":null,\"plug_1\":null,\"plug_2\":null,\"plug_3\":null,\"plug_4\":null,\"plug_5\":null}",
                         strMac ); //触发上报
-                    user_function_cmd_received( NULL, buf1 );
+                    user_function_cmd_received( 0, buf1 );
                     free( buf1 );
                 }
                 break;
@@ -157,7 +157,7 @@ void user_mqtt_timer_func( void *arg )
             //     if ( buf1 != NULL )
             //     {
             //         sprintf( buf1,"{\"cmd\":\"device report\"}");
-            //         user_function_cmd_received( NULL, buf1 );
+            //         user_function_cmd_received( 0, buf1 );
             //         free( buf1 );
             //     }
             //     break;
