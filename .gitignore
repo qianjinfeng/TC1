@@ -2,3 +2,4 @@ build/
 mico-os/
 .gdb*
 .openocd_fg
+.openocd_cfg
