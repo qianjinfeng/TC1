@@ -91,7 +91,8 @@ void udp_thread( void *arg )
             if(len<1024) buf[len]=0;
             os_log( "udp recv from %s:%d, len:%d ", ip_address,addr.sin_port, len );
             user_function_cmd_received(1,buf);
-//            sendto( udp_fd, buf, len, 0, (struct sockaddr *) &addr, sizeof(struct sockaddr_in) );
+            //TODO Testpurpuse
+            //sendto( udp_fd, buf, len, 0, (struct sockaddr *) &addr, sizeof(struct sockaddr_in) );
         }
 
         /* recv msg from user worker thread to be sent to server */
@@ -125,7 +126,7 @@ void udp_thread( void *arg )
 static OSStatus udp_msg_send( int socket, const unsigned char* msg, uint32_t msg_len )
 {
     OSStatus err = kUnknownErr;
-    int ret = 0;
+    //int ret = 0;
 
     require( msg_len && msg, exit );
 

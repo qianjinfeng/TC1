@@ -49,6 +49,7 @@ void user_function_cmd_received( int udp_flag, uint8_t *pusrdata )
         cJSON_AddStringToObject( pRoot, "mac", strMac );
         cJSON_AddNumberToObject( pRoot, "type", TYPE );
         cJSON_AddStringToObject( pRoot, "type_name", TYPE_NAME );
+        cJSON_AddStringToObject( pRoot, "version", VERSION );
         cJSON_AddNumberToObject( pRoot, "total_time", total_time );
         IPStatusTypedef para;
         micoWlanGetIPStatus( &para, Station );
@@ -219,13 +220,12 @@ bool json_plug_analysis( int udp_flag, unsigned char x, cJSON * pJsonRoot, cJSON
 {
     if ( !pJsonRoot ) return false;
     if ( !pJsonSend ) return false;
-    char i;
+
     bool return_flag = false;
     char plug_str[] = "plug_X";
     plug_str[5] = x + '0';
 
     cJSON *p_plug = cJSON_GetObjectItem( pJsonRoot, plug_str );
-    if ( !p_plug ) return_flag = false;
 
     //解析plug on------------------------------------------------------
     if ( p_plug )
@@ -241,7 +241,7 @@ bool json_plug_analysis( int udp_flag, unsigned char x, cJSON * pJsonRoot, cJSON
                 user_mqtt_send_plug_state( x );
             } 
     }
-    cJSON_AddItemToObject( pJsonSend, plug_str, user_config->plug[x] );
+    cJSON_AddNumberToObject( pJsonSend, plug_str, user_config->plug[x] );
     return return_flag;
 }
 

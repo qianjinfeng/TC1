@@ -4,7 +4,7 @@
 #include "mico_socket.h"
 #include "user_gpio.h"
 #include "user_sntp.h"
-
+#include "user_function.h"
 #define os_log(format, ...)  custom_log("WIFI", format, ##__VA_ARGS__)
 
 char wifi_status = WIFI_STATE_NOCONNECT;

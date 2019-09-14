@@ -26,7 +26,7 @@ mico_gpio_t Relay[Relay_NUM] = { Relay_0, Relay_1, Relay_2, Relay_3, Relay_4, Re
 /* MICO system callback: Restore default configuration provided by application */
 void appRestoreDefault_callback( void * const user_config_data, uint32_t size )
 {
-    int i, j;
+    int i;
     UNUSED_PARAMETER( size );
 
     mico_system_context_get( )->micoSystemConfig.name[0] = 1;   //在下次重启时使用默认名称
@@ -139,11 +139,11 @@ int application_start( void )
         {
             power_last = power;
             main_num =0;
-            uint8_t *power_buf = NULL;
+            char *power_buf = NULL;
             power_buf = malloc( 128 );
             if ( power_buf != NULL )
             {
-                sprintf( power_buf, "{\"mac\":\"%s\",\"power\":\"%d.%d\",\"total_time\":%d}", strMac, power / 10, power % 10, total_time );
+                sprintf( power_buf, "{\"mac\":\"%s\",\"power\":\"%ld.%ld\",\"total_time\":%d}", strMac, power / 10, power % 10, total_time );
                 user_send( 0, power_buf );
                 free( power_buf );
             }
