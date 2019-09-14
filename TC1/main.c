@@ -39,6 +39,14 @@ void appRestoreDefault_callback( void * const user_config_data, uint32_t size )
     userConfigDefault->mqtt_port = 0;
     userConfigDefault->mqtt_user[0] = 0;
     userConfigDefault->mqtt_password[0] = 0;
+    // sprintf(userConfigDefault->mqtt_ip, CONFIG_MQTT_IP);
+    // userConfigDefault->mqtt_port = CONFIG_MQTT_PORT;
+    // sprintf(userConfigDefault->mqtt_user, CONFIG_MQTT_USER);
+    // sprintf(userConfigDefault->mqtt_password, CONFIG_MQTT_PASSWORD);
+    // //初始化wifi及密码
+    // strcpy( mico_system_context_get( )->micoSystemConfig.ssid, CONFIG_SSID );
+    // strcpy( mico_system_context_get( )->micoSystemConfig.user_key, CONFIG_USER_KEY );
+    // mico_system_context_get( )->micoSystemConfig.user_keyLength = strlen( CONFIG_USER_KEY );
 
     userConfigDefault->version = USER_CONFIG_VERSION;
     for ( i = 0; i < PLUG_NUM; i++ )
@@ -148,7 +156,7 @@ int application_start( void )
                 free( power_buf );
             }
             //what if mqtt not set
-            //user_mqtt_hass_power( );
+            user_mqtt_hass_power( );
         }
         mico_thread_msleep(10000);
 

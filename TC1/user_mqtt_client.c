@@ -570,31 +570,6 @@ OSStatus user_mqtt_hass_auto( char plug_id )
     return err;
 
 }
-/*
-void user_mqtt_hass_auto_name( char plug_id )
-{
-    uint8_t *send_buf = NULL;
-    uint8_t *topic_buf = NULL;
-    send_buf = (uint8_t *) malloc( 512 );
-    topic_buf = (uint8_t *) malloc( 128 );
-    if ( send_buf != NULL && topic_buf != NULL )
-    {
-        sprintf( topic_buf, "homeassistant/switch/%s/plug_%d/config", strMac, plug_id );
-        sprintf( send_buf, "{"
-                 "\"name\":\"%s\","
-                 "\"state_topic\":\"homeassistant/switch/%s/plug_%d/state\","
-                 "\"command_topic\":\"device/ztc1/set\","
-                 "\"payload_on\":\"{\\\"mac\\\":\\\"%s\\\",\\\"plug_%d\\\":{\\\"on\\\":1}}\","
-                 "\"payload_off\":\"{\\\"mac\\\":\\\"%s\\\",\\\"plug_%d\\\":{\\\"on\\\":0}}\""
-                 "}\0",
-                 user_config->plug[plug_id].name, strMac, plug_id, strMac, plug_id, strMac, plug_id );
-        user_mqtt_send_topic( topic_buf, send_buf, 0 );
-    }
-    if ( send_buf )
-        free( send_buf );
-    if ( topic_buf )
-        free( topic_buf );
-}*/
 //hass mqtt自动发现数据功率发送
 OSStatus user_mqtt_hass_auto_power( void )
 {
@@ -621,38 +596,6 @@ OSStatus user_mqtt_hass_auto_power( void )
     if ( topic_buf ) free( topic_buf );
     return err;
 }
-/*OSStatus user_mqtt_hass_auto_power_name( void )
-{
-    OSStatus err = kUnknownErr;
-    uint8_t *send_buf = NULL;
-    uint8_t *topic_buf = NULL;
-    send_buf = (uint8_t *) malloc( 512 ); //
-    topic_buf = (uint8_t *) malloc( 128 ); //
-    if ( send_buf != NULL && topic_buf != NULL )
-    {
-        sprintf( topic_buf, "homeassistant/sensor/%s/power/config", sys_config->micoSystemConfig.name );
-        sprintf( send_buf, "{"
-                 "\"name\":\"zTC1xxxxxx\","
-                 "\"state_topic\":\"homeassistant/sensor/%s/power/state\","
-                 "\"unit_of_measurement\":\"W\","
-                 "\"icon\":\"mdi:gauge\","
-                 "\"value_template\":\"{{ value_json.power }}\""
-                 "}",
-                 strMac );
-        send_buf[13] = 0xe5;
-        send_buf[14] = 0x8a;
-        send_buf[15] = 0x9f;
-        send_buf[16] = 0xe7;
-        send_buf[17] = 0x8e;
-        send_buf[18] = 0x87;
-        user_mqtt_send_topic( topic_buf, send_buf, 0 );
-    }
-    if ( send_buf )
-        free( send_buf );
-    if ( topic_buf )
-        free( topic_buf );
-    return err;
-}*/
 
 OSStatus user_mqtt_hass_power( void )
 {
