@@ -4,6 +4,21 @@ udp send 10182
 
 {"name":"tc1_d0bae46447e2","mac":"d0bae46447e2","setting":{"mqtt_uri":"192.168.1.3","mqtt_port":1883,"mqtt_user":"mqtt","mqtt_password":"mqtt"}}
 
-{"mac":"d0bae46447e2","version":"v"}
+{"mac":"d0bae46447e2","version":"v1"}
 {"cmd":"device report"}
 {"mac":"d0bae46447e2","cmd":"restart"}
+{"mac":"d0bae46447e2","plug_0":0}
+{"name":"tc1_d0bae46447e2","cmd":"restart"}
+{"name":"tc1_d0bae46447e2","version":"v1"}
+{"mac":"d0bae46447e2","setting":{"ota":"http://192.168.31.131:8080/tc1ota.bin"}}
+{
+"mac" : "d0bae46447e2",
+    "setting":
+    {
+    	"ota":"http://192.168.31.131:8080/tc1ota.bin"
+    }
+}
+
+homeassistant/sensor/tc1_d0bae46447e2/power/config
+
+cmnd/tc1_d0bae46447e2

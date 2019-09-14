@@ -26,7 +26,7 @@ mico_gpio_t Relay[Relay_NUM] = { Relay_0, Relay_1, Relay_2, Relay_3, Relay_4, Re
 /* MICO system callback: Restore default configuration provided by application */
 void appRestoreDefault_callback( void * const user_config_data, uint32_t size )
 {
-    int i, j;
+    int i;
     UNUSED_PARAMETER( size );
 
     mico_system_context_get( )->micoSystemConfig.name[0] = 1;   //在下次重启时使用默认名称
@@ -39,6 +39,14 @@ void appRestoreDefault_callback( void * const user_config_data, uint32_t size )
     userConfigDefault->mqtt_port = 0;
     userConfigDefault->mqtt_user[0] = 0;
     userConfigDefault->mqtt_password[0] = 0;
+    // sprintf(userConfigDefault->mqtt_ip, CONFIG_MQTT_IP);
+    // userConfigDefault->mqtt_port = CONFIG_MQTT_PORT;
+    // sprintf(userConfigDefault->mqtt_user, CONFIG_MQTT_USER);
+    // sprintf(userConfigDefault->mqtt_password, CONFIG_MQTT_PASSWORD);
+    // //初始化wifi及密码
+    // strcpy( mico_system_context_get( )->micoSystemConfig.ssid, CONFIG_SSID );
+    // strcpy( mico_system_context_get( )->micoSystemConfig.user_key, CONFIG_USER_KEY );
+    // mico_system_context_get( )->micoSystemConfig.user_keyLength = strlen( CONFIG_USER_KEY );
 
     userConfigDefault->version = USER_CONFIG_VERSION;
     for ( i = 0; i < PLUG_NUM; i++ )
@@ -139,16 +147,16 @@ int application_start( void )
         {
             power_last = power;
             main_num =0;
-            uint8_t *power_buf = NULL;
+            char *power_buf = NULL;
             power_buf = malloc( 128 );
             if ( power_buf != NULL )
             {
-                sprintf( power_buf, "{\"mac\":\"%s\",\"power\":\"%d.%d\",\"total_time\":%d}", strMac, power / 10, power % 10, total_time );
+                sprintf( power_buf, "{\"mac\":\"%s\",\"power\":\"%ld.%ld\",\"total_time\":%d}", strMac, power / 10, power % 10, total_time );
                 user_send( 0, power_buf );
                 free( power_buf );
             }
             //what if mqtt not set
-            //user_mqtt_hass_power( );
+            user_mqtt_hass_power( );
         }
         mico_thread_msleep(10000);
 

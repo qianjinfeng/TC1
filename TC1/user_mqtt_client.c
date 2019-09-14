@@ -141,7 +141,7 @@ void user_mqtt_timer_func( void *arg )
                 user_mqtt_send_tc1_state();
                 break;
             case 9:
-                buf1 = malloc( 512 ); //idx为1位时长度为24
+                buf1 = malloc( 256 ); //idx为1位时长度为24
                 if ( buf1 != NULL )
                 {
                     sprintf(
@@ -324,7 +324,7 @@ void mqtt_client_thread( mico_thread_arg_t arg )
     mqtt_log("MQTT client init success!");
 
     /* 3. create mqtt client connection */
-    connectData.willFlag = 0;
+    // connectData.willFlag = 0;
     connectData.MQTTVersion = 4;  // 3: 3.1, 4: v3.1.1
     connectData.clientID.cstring = sys_config->micoSystemConfig.name;
     connectData.username.cstring = user_config->mqtt_user;
@@ -462,7 +462,7 @@ OSStatus user_recv_handler( void *arg )
     require( p_recv_msg, exit );
 
     app_log("user get data success! from_topic=[%s], msg=[%ld].\r\n", p_recv_msg->topic, p_recv_msg->datalen);
-    user_function_cmd_received( 0, (char *)p_recv_msg->data );
+    user_function_cmd_received( 0, p_recv_msg->data );
     free( p_recv_msg );
 
     exit:
@@ -511,7 +511,7 @@ OSStatus user_mqtt_send( char *arg )
 }
 
 //更新ha开关状态
-OSStatus user_mqtt_send_plug_state( char plug_id )
+OSStatus user_mqtt_send_plug_state( unsigned char plug_id )
 {
     OSStatus err = kUnknownErr;
     char *send_buf = NULL;
@@ -548,8 +548,8 @@ OSStatus user_mqtt_send_tc1_state(void)
 OSStatus user_mqtt_hass_auto( char plug_id )
 {
     OSStatus err = kUnknownErr;
-    uint8_t *send_buf = NULL;
-    uint8_t *topic_buf = NULL;
+    char *send_buf = NULL;
+    char *topic_buf = NULL;
     send_buf = malloc( 512 ); //
     topic_buf = malloc( 128 ); //
     if ( send_buf != NULL && topic_buf != NULL )
@@ -561,7 +561,7 @@ OSStatus user_mqtt_hass_auto( char plug_id )
                  "\"command_topic\":\"cmnd/%s\","
                  "\"payload_on\":\"{\\\"plug_%d\\\":1\","
                  "\"payload_off\":\"{\\\"plug_%d\\\":0\""
-                 "}\0",
+                 "}",
                  sys_config->micoSystemConfig.name, plug_id, sys_config->micoSystemConfig.name, plug_id, sys_config->micoSystemConfig.name, plug_id, plug_id );
         err = user_mqtt_send_topic( topic_buf, send_buf, 1, 1 );
     }
@@ -570,37 +570,12 @@ OSStatus user_mqtt_hass_auto( char plug_id )
     return err;
 
 }
-/*
-void user_mqtt_hass_auto_name( char plug_id )
-{
-    uint8_t *send_buf = NULL;
-    uint8_t *topic_buf = NULL;
-    send_buf = (uint8_t *) malloc( 512 );
-    topic_buf = (uint8_t *) malloc( 128 );
-    if ( send_buf != NULL && topic_buf != NULL )
-    {
-        sprintf( topic_buf, "homeassistant/switch/%s/plug_%d/config", strMac, plug_id );
-        sprintf( send_buf, "{"
-                 "\"name\":\"%s\","
-                 "\"state_topic\":\"homeassistant/switch/%s/plug_%d/state\","
-                 "\"command_topic\":\"device/ztc1/set\","
-                 "\"payload_on\":\"{\\\"mac\\\":\\\"%s\\\",\\\"plug_%d\\\":{\\\"on\\\":1}}\","
-                 "\"payload_off\":\"{\\\"mac\\\":\\\"%s\\\",\\\"plug_%d\\\":{\\\"on\\\":0}}\""
-                 "}\0",
-                 user_config->plug[plug_id].name, strMac, plug_id, strMac, plug_id, strMac, plug_id );
-        user_mqtt_send_topic( topic_buf, send_buf, 0 );
-    }
-    if ( send_buf )
-        free( send_buf );
-    if ( topic_buf )
-        free( topic_buf );
-}*/
 //hass mqtt自动发现数据功率发送
 OSStatus user_mqtt_hass_auto_power( void )
 {
     OSStatus err = kUnknownErr;
-    uint8_t *send_buf = NULL;
-    uint8_t *topic_buf = NULL;
+    char *send_buf = NULL;
+    char *topic_buf = NULL;
     send_buf = malloc( 512 ); //
     topic_buf = malloc( 128 ); //
     if ( send_buf != NULL && topic_buf != NULL )
@@ -621,44 +596,12 @@ OSStatus user_mqtt_hass_auto_power( void )
     if ( topic_buf ) free( topic_buf );
     return err;
 }
-/*OSStatus user_mqtt_hass_auto_power_name( void )
-{
-    OSStatus err = kUnknownErr;
-    uint8_t *send_buf = NULL;
-    uint8_t *topic_buf = NULL;
-    send_buf = (uint8_t *) malloc( 512 ); //
-    topic_buf = (uint8_t *) malloc( 128 ); //
-    if ( send_buf != NULL && topic_buf != NULL )
-    {
-        sprintf( topic_buf, "homeassistant/sensor/%s/power/config", sys_config->micoSystemConfig.name );
-        sprintf( send_buf, "{"
-                 "\"name\":\"zTC1xxxxxx\","
-                 "\"state_topic\":\"homeassistant/sensor/%s/power/state\","
-                 "\"unit_of_measurement\":\"W\","
-                 "\"icon\":\"mdi:gauge\","
-                 "\"value_template\":\"{{ value_json.power }}\""
-                 "}",
-                 strMac );
-        send_buf[13] = 0xe5;
-        send_buf[14] = 0x8a;
-        send_buf[15] = 0x9f;
-        send_buf[16] = 0xe7;
-        send_buf[17] = 0x8e;
-        send_buf[18] = 0x87;
-        user_mqtt_send_topic( topic_buf, send_buf, 0 );
-    }
-    if ( send_buf )
-        free( send_buf );
-    if ( topic_buf )
-        free( topic_buf );
-    return err;
-}*/
 
 OSStatus user_mqtt_hass_power( void )
 {
     OSStatus err = kUnknownErr;
-    uint8_t *send_buf = NULL;
-    uint8_t *topic_buf = NULL;
+    char *send_buf = NULL;
+    char *topic_buf = NULL;
     send_buf = malloc( 512 ); //
     topic_buf = malloc( 128 ); //
     if ( send_buf != NULL && topic_buf != NULL )

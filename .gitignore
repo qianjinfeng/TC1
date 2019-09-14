@@ -1,0 +1,4 @@
+build/
+mico-os/
+.gdb*
+.openocd_fg

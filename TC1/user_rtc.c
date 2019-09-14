@@ -123,8 +123,6 @@ OSStatus user_rtc_init( void )
 
 void rtc_thread( mico_thread_arg_t arg )
 {
-    //int i, j;
-    //char task_flag[PLUG_NUM] = { -1, -1, -1, -1, -1, -1 };   //ŒÇÂŒÃ¿žö²å×ùÄÄžöÈÎÎñÐèÒª·µ»ØÊýŸÝ
     OSStatus err = kUnknownErr;
     LinkStatusTypeDef LinkStatus;
     mico_rtc_time_t rtc_time;
