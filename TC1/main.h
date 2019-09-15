@@ -4,7 +4,7 @@
 #include "mico.h"
 #include "MiCOKit_EXT.h"
 
-#define VERSION "v0.10.5"
+#define VERSION "v0.10.6"
 
 #define TYPE 1
 #define TYPE_NAME "tc1"

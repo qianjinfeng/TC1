@@ -559,10 +559,10 @@ OSStatus user_mqtt_hass_auto( char plug_id )
                  "\"name\":\"%s_plug%d\","
                  "\"state_topic\":\"homeassistant/switch/%s/plug_%d/state\","
                  "\"command_topic\":\"cmnd/%s\","
-                 "\"payload_on\":\"{\\\"plug_%d\\\":1\","
-                 "\"payload_off\":\"{\\\"plug_%d\\\":0\""
+                 "\"payload_on\":\"{\\\"mac\\\":\\\"%s\\\",\\\"plug_%d\\\":1}\","
+                 "\"payload_off\":\"{\\\"mac\\\":\\\"%s\\\",\\\"plug_%d\\\":0}\""
                  "}",
-                 sys_config->micoSystemConfig.name, plug_id, sys_config->micoSystemConfig.name, plug_id, sys_config->micoSystemConfig.name, plug_id, plug_id );
+                 sys_config->micoSystemConfig.name, plug_id, sys_config->micoSystemConfig.name, plug_id, sys_config->micoSystemConfig.name, strMac, plug_id, strMac, plug_id );
         err = user_mqtt_send_topic( topic_buf, send_buf, 1, 1 );
     }
     if ( send_buf ) free( send_buf );

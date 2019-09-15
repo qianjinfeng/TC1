@@ -99,11 +99,10 @@ static void key_short_press( void )
         user_relay_set_all( 1 );
     }
 
-    //TODO open or not
-    // for ( i = 0; i < PLUG_NUM; i++ )
-    // {
-    //     user_mqtt_send_plug_state(i);
-    // }
+    for ( i = 0; i < PLUG_NUM; i++ )
+    {
+        user_mqtt_send_plug_state(i);
+    }
 }
 mico_timer_t user_key_timer;
 uint16_t key_time = 0;
