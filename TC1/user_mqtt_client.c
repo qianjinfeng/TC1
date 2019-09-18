@@ -521,7 +521,7 @@ OSStatus user_mqtt_send_plug_state( unsigned char plug_id )
     if ( send_buf != NULL && topic_buf != NULL )
     {
         sprintf( topic_buf, "homeassistant/switch/%s/plug_%d/state", sys_config->micoSystemConfig.name, plug_id );
-        sprintf( send_buf, "{\"plug_%d\":%d}", plug_id, user_config->plug[plug_id] );
+        sprintf( send_buf, "{\"mac\":\"%s\",\"plug_%d\":%d}", strMac, plug_id, user_config->plug[plug_id] );
         err = user_mqtt_send_topic( topic_buf, send_buf, 1, 1 );
     }
     if ( send_buf ) free( send_buf );
