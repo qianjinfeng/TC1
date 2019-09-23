@@ -1,3 +1,0 @@
-source [find /home/qian/workplace/mico/MiCoder/OpenOCD/jlink_swd.cfg]
-source [find /home/qian/workplace/mico/MiCoder/OpenOCD/mw3xx.cfg]
-source [find /home/qian/workplace/mico/MiCoder/OpenOCD/mw3xx_gdb_jtag.cfg]
