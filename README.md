@@ -21,7 +21,8 @@
 
 ## 编译代码
     git clone https://github.com/qianjinfeng/TC1.git
-    mico sync
+    cd TC1
+    mico deploy
     mico make TC1@MK3031@moc
 
 ## [烧录固件](https://github.com/a2633063/zTC1/wiki/%E5%9B%BA%E4%BB%B6%E7%83%A7%E5%BD%95) 
@@ -93,7 +94,9 @@
 搭建http-server    
 ```
 npm install http-server -g
-htt-server (在ota.bin目录里运行)
+cd .\build\TC1@MK3031@moc\binary
+copy TC1@MK3031@moc.ota.bin ota.bin
+htt-server 
 ```  
 
 udp send 插座ip 10182  
