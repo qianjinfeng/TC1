@@ -22,6 +22,7 @@
 ## 编译代码
     git clone https://github.com/qianjinfeng/TC1.git
     cd TC1
+    git checkout aliyun
     mico deploy
     mico make TC1@MK3031@moc
 

@@ -2,7 +2,7 @@
 
 #include "main.h"
 #include "user_gpio.h"
-#include "user_mqtt_client.h"
+//#include "user_mqtt_client.h"
 #include "user_udp.h"
 #include "cJSON/cJSON.h"
 
@@ -99,10 +99,10 @@ static void key_short_press( void )
         user_relay_set_all( 1 );
     }
 
-    for ( i = 0; i < PLUG_NUM; i++ )
-    {
-        user_mqtt_send_plug_state(i);
-    }
+    // for ( i = 0; i < PLUG_NUM; i++ )
+    // {
+    //     user_mqtt_send_plug_state(i);
+    // }
 }
 mico_timer_t user_key_timer;
 uint16_t key_time = 0;

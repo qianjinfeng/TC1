@@ -19,6 +19,13 @@
 #  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 #  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR 
 #  IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+				#    user_mqtt_client.c\
+								   #http_server/app_httpd.c \
+				   #http_server/web_data.c
+
+				   					  # protocols/mqtt
+									#daemons/http_server
+														#
 ############################################################################### 
 
 
@@ -32,15 +39,17 @@ $(NAME)_SOURCES := main.c\
 				   user_udp.c\
 				   user_sntp.c\
 				   user_rtc.c\
-				   user_mqtt_client.c\
 				   user_ota.c\
 				   user_power.c\
 				   user_function.c\
-				   http_server/app_httpd.c \
-				   http_server/web_data.c
+				   user_mqtt.c
+
 				   
 $(NAME)_COMPONENTS := protocols/SNTP\
-					protocols/mqtt\
-					utilities/url\
-					daemons/http_server
+					  lib_mqtt\
+					  utilities/url
+
+
+
+					
 					

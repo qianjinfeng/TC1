@@ -4,7 +4,6 @@
 #include "mico.h"
 #include "main.h"
 #include "user_udp.h"
-#include "user_mqtt_client.h"
 #include "user_function.h"
 
 mico_timer_t power_timer;

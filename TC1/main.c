@@ -5,13 +5,13 @@
 #include "user_rtc.h"
 #include "user_udp.h"
 #include "user_power.h"
-#include "user_mqtt_client.h"
+//#include "user_mqtt_client.h"
 #include "user_function.h"
 #include "http_server/app_httpd.h"
 
 #define os_log(format, ...)  custom_log("TC1", format, ##__VA_ARGS__)
 
-
+extern OSStatus start_mqtt_sub_pub( void );
 
 char rtc_init = 0;    //sntp校时成功标志位
 uint32_t total_time=0;
@@ -131,7 +131,8 @@ int application_start( void )
     wifi_init( );
     user_udp_init( );
     key_init( );
-    err = user_mqtt_init( );
+    // err = user_mqtt_init( );
+    err = start_mqtt_sub_pub();
     require_noerr( err, exit );
     err = user_rtc_init( );
     require_noerr( err, exit );
@@ -155,8 +156,8 @@ int application_start( void )
                 user_send( 0, power_buf );
                 free( power_buf );
             }
-            //what if mqtt not set
-            user_mqtt_hass_power( );
+            // //what if mqtt not set
+            // user_mqtt_hass_power( );
         }
         mico_thread_msleep(10000);
 

@@ -4,7 +4,6 @@
 #include "ota_server/ota_server.h"
 #include "main.h"
 #include "user_udp.h"
-#include "user_mqtt_client.h"
 #include "user_function.h"
 
 static void ota_server_status_handler( OTA_STATE_E state, float progress )

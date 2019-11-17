@@ -6,7 +6,7 @@
 #include "user_gpio.h"
 #include "cJSON/cJSON.h"
 #include "user_ota.h"
-#include "user_mqtt_client.h"
+//#include "user_mqtt_client.h"
 #include "user_udp.h"
 
 uint32_t last_time = 0;
@@ -20,10 +20,11 @@ bool json_plug_analysis( int udp_flag, unsigned char x, cJSON * pJsonRoot, cJSON
 
 void user_send( int udp_flag, char *s )
 {
-    if ( udp_flag || !user_mqtt_isconnect( ) )
-        user_udp_send( s ); //·¢ËÍÊýŸÝ
-    else
-        user_mqtt_send( s );
+    user_udp_send( s ); 
+    // if ( udp_flag || !user_mqtt_isconnect( ) )
+    //     user_udp_send( s ); 
+    // else
+    //     user_mqtt_send( s );
 }
 
 void user_function_cmd_received( int udp_flag, uint8_t *pusrdata )
@@ -238,7 +239,7 @@ bool json_plug_analysis( int udp_flag, unsigned char x, cJSON * pJsonRoot, cJSON
             //send through mqtt
             if ( udp_flag == 0 ) 
             {
-                user_mqtt_send_plug_state( x );
+                // user_mqtt_send_plug_state( x );
             } 
     }
     cJSON_AddNumberToObject( pJsonSend, plug_str, user_config->plug[x] );
